@@ -4,7 +4,11 @@ Programa desenvolvido por mim e pela @roseeeie para baixar videos/musicas do you
 ```
 pip install pytube
 ```
+
+```
 pip install moviepy
+```
+
 ```
 pip install PySimpleGUI
 ```
