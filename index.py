@@ -2,34 +2,19 @@ from pytube import YouTube
 import PySimpleGUI as sg
 import urllib.request
 import sys
+from view import tela
 from moviepy.editor import *
 
 sg.theme('DarkGreen')
 
-def menu():
-    layout = [
-        [sg.Text('Destino', size=(20, 1)), sg.Input(key='path', size=(20,1)), sg.FolderBrowse(target='path')],
-        [sg.Text('URL', size=(20, 1)), sg.Input(key='URL', size=(20,1))],
-        [sg.Text('Tipo', size=(20, 1)), sg.Combo(['Video', 'Audio', 'Imagem'], key='tipo'), sg.Input(key='nome', size=(20,1))],
-        [sg.Button('Fechar', key='close'), sg.Button('Baixar', key='baixar'), sg.Button('Converter', key='convert')]
-    ]
-    return sg.Window('youtubePython', layout, finalize=True)
+Tela = tela()
 
-def tela_convert():
-    layout = [
-        [sg.Text('Video', size=(20, 1)), sg.Input(key='video_convert', size=(20, 1)), sg.FilesBrowse(target='video_convert')],
-        [sg.Text('Diretorio', size=(20, 1)), sg.Input(key='_path', size=(20,1)), sg.FolderBrowse(target='_path')],
-        [sg.Text('Nome', size=(20, 1)), sg.Input(key='name', size=(20, 1))],
-        [sg.Button('Converter', key='b_convert'), sg.Button('Voltar', key='voltar')]
-    ]
-    return sg.Window('Conversor', layout, finalize=True)
-
-menu, tela_converter = menu(), None
+inicial, converter = Tela.inicial(), None
 
 while True:
     window, event, values = sg.read_all_windows()
 
-    if window == menu and event == sg.WIN_CLOSED or event == 'close':
+    if window == inicial and event == sg.WIN_CLOSED or event == 'close':
         break
     if event == 'baixar':
         if values['tipo'] == 'Video' or values['tipo'] == 'Audio':
@@ -54,15 +39,15 @@ while True:
             except:
                 erro = sys.exc_info()
                 print("Ocorreu um erro:", erro)
-    if window == menu and event == 'convert':
-        tela_converter = tela_convert()
-        menu.hide()
-    if window == tela_converter and event == sg.WIN_CLOSED:
+    if window == inicial and event == 'convert':
+        converter = Tela.convert()
+        inicial.hide()
+    if window == converter and event == sg.WIN_CLOSED:
         break
-    if window == tela_converter and event == 'voltar':
-        menu.un_hide()
-        tela_converter.hide()
-    if window == tela_converter and event == 'b_convert':
+    if window == converter and event == 'voltar':
+        inicial.un_hide()
+        converter.hide()
+    if window == converter and event == 'b_convert':
         mp4_file = values['video_convert']
         mp3_file = str(values['_path'] + "/" + values['name'] + '.mp3')
         videoclip = VideoFileClip(mp4_file)
